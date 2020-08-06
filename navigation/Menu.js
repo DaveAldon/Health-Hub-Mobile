@@ -6,7 +6,6 @@ import { useSafeArea } from "react-native-safe-area-context";
 import { Icon, Drawer as DrawerCustomItem } from '../components/';
 import { Images, materialTheme } from "../constants/";
 
-
 function CustomDrawerContent({
   drawerPosition,
   navigation,
@@ -18,10 +17,6 @@ function CustomDrawerContent({
   const insets = useSafeArea();
   const screens = [
     "Home",
-    "Woman",
-    "Man",
-    "Kids",
-    "New Collection",
     "Profile",
     "Settings",
     "Components"
