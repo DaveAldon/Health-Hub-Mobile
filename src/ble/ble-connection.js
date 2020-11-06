@@ -71,7 +71,7 @@ export default class BleConnection {
     if (connectedDevice) {
       this.shouldNotifyWhenConnected = false;
 
-      console.log('CAAANCEEEEEL cancelDeviceConnection !!!');
+      console.log('CANCEL cancelDeviceConnection !!!');
       bleManager.cancelDeviceConnection(connectedDevice.id);
     }
   }

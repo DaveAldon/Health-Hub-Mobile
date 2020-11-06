@@ -64,8 +64,8 @@ export default function useBleConnection() {
     setCurrentDevice(device);
   }
 
-  // this should be rather moved to separate module
-  // (as it is not about connection)
+  // this should be moved to separate module
+  // (as it is not about making a connection)
   function sendColor(color) {
     console.log('SEND THIS COLOR = ', color);
 

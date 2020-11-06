@@ -34,7 +34,7 @@ const App = () => {
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <SafeAreaView>
+      <SafeAreaView style={{height: "100%"}}>
         <MainContainer />
         {/* <View>
           <Text>Learn More</Text>

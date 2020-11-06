@@ -1,3 +1,4 @@
+import { Text } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Container,
@@ -9,7 +10,7 @@ import {
 const DeviceItem = ({ name, onSelect, isPairing, isLastElem }) => {
   return (
     <Container onPress={onSelect}>
-      <TitleText>{name}</TitleText>
+      <Text>{name}</Text>
       {isPairing && <ConnectingText>{'pairing...'}</ConnectingText>}
       {!isLastElem && <BorderLine />}
     </Container>

@@ -35,14 +35,14 @@ const MainContainer = () => {
   }
 
   return (
-      <>
+      <View style={{flex: 1}}>
     {isScanning && (
               <ScanDevicesScreenContainer
                 onClose={() => setIsScanning(false)}
                 onDeviceConnected={onNewDeviceConnected}
               />
             )}
-    </>
+    </View>
   );
 };
 

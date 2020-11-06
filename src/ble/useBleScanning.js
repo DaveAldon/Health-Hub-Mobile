@@ -20,8 +20,8 @@ const useBleScanning = () => {
   const startScanning = useCallback(() => {
     console.log("scanning now")
     bleScanning.current.startScanning((device) => {
-      console.log("is scanning")
-      console.log('check DEVICE = ', device);
+      //console.log("is scanning")
+      //console.log('check DEVICE = ', device);
 
       addNewDevice({
         name: device.name ?? '',
