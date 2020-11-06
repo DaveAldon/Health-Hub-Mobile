@@ -1,14 +1,19 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
-require_relative '../node_modules/react-native-unimodules/cocoapods.rb'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 platform :ios, '10.0'
 
-target 'healthhub' do
-  use_unimodules!
+target 'firstapp' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
+
+  pod 'react-native-ble-plx', :path => '../node_modules/react-native-ble-plx'
+
+  target 'firstappTests' do
+    inherit! :complete
+    # Pods for testing
+  end
 
   # Enables Flipper.
   #
@@ -17,5 +22,14 @@ target 'healthhub' do
   use_flipper!
   post_install do |installer|
     flipper_post_install(installer)
+  end
+end
+
+target 'firstapp-tvOS' do
+  # Pods for firstapp-tvOS
+
+  target 'firstapp-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
   end
 end
