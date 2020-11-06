@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useCallback } from 'react';
-import useBleConnection from './useBleConnection';
-import useBleStorage from './useBleStorage';
-import useAppState from '../hooks/useAppState';
+import React, { useEffect, useRef, useCallback } from "react";
+import useBleConnection from "./useBleConnection";
+import useBleStorage from "./useBleStorage";
+import useAppState from "../hooks/useAppState";
 
 export default function useBleDevices() {
   const ble = useBleConnection();
@@ -53,18 +53,18 @@ export default function useBleDevices() {
     bleStorage.removeDevice(device);
   }
 
-  function sendColorToCurrentDevice(color) {
-    ble.sendColor(color);
+  function sendMessageToCurrentDevice(message) {
+    ble.sendMessage(message);
   }
 
   return {
     connectToDevice,
     removeDevice,
     onNewDevicePaired,
-    sendColorToCurrentDevice,
+    sendMessageToCurrentDevice,
     devices: bleStorage.devices,
     currentDevice: bleStorage.currentDevice,
     isConnected: ble.isConnected,
-    isConnecting: ble.isConnecting
+    isConnecting: ble.isConnecting,
   };
 }

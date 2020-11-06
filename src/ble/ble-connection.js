@@ -1,18 +1,14 @@
-import { bleManager } from '../../App';
-import { HSVtoRGB, rawHSVtoRGB } from '../theme/colors';
+import { bleManager } from "../../App";
+import { HSVtoRGB, rawHSVtoRGB } from "../theme/colors";
 // @ts-ignore
-import base64 from 'react-native-base64';
-
-//
+import base64 from "react-native-base64";
 
 let connectedDevice = null;
 
-//
-
 // Device's Serial Port service and write charasteristic
-const SerialServiceUUID = '0000dfb0-0000-1000-8000-00805f9b34fb';
-const SerialCharacteristicUUID = '0000dfb1-0000-1000-8000-00805f9b34fb';
-
+const UART_SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
+const SerialCharacteristicUUID = "0000dfb1-0000-1000-8000-00805f9b34fb";
+const UART_TX_CHARACTERISTIC_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
 //
 // Ugly(!!!!) wrapper for bleManager
 //
@@ -33,15 +29,13 @@ export default class BleConnection {
     try {
       await bleManager.connectToDevice(device.id);
 
-      await bleManager.discoverAllServicesAndCharacteristicsForDevice(
-        device.id
-      );
+      await bleManager.discoverAllServicesAndCharacteristicsForDevice(device.id);
 
       // optional
       this._showAllCharacteristics(device);
     } catch (err) {
       if (this.shouldNotifyWhenConnected) {
-        throw 'Could not connect!';
+        throw "Could not connect!";
       }
     }
   }
@@ -49,34 +43,28 @@ export default class BleConnection {
   // optional to see all services and characteristics
   _showAllCharacteristics(device) {
     bleManager.servicesForDevice(device.id).then((services) => {
-      console.log('SERVICES = ', services);
+      console.log("SERVICES = ", services);
 
       services.forEach((s) => {
         bleManager.characteristicsForDevice(device.id, s.uuid).then((char) => {
-          console.log('CHARS = ', char);
+          console.log("CHARS = ", char);
         });
       });
     });
   }
 
-  //
-
   stopConnecting() {
     this.shouldNotifyWhenConnected = false;
   }
-
-  //
 
   disconnect() {
     if (connectedDevice) {
       this.shouldNotifyWhenConnected = false;
 
-      console.log('CANCEL cancelDeviceConnection !!!');
+      console.log("CANCEL cancelDeviceConnection !!!");
       bleManager.cancelDeviceConnection(connectedDevice.id);
     }
   }
-
-  //
 
   onDisconnected(callback) {
     if (!connectedDevice) {
@@ -84,7 +72,7 @@ export default class BleConnection {
     }
 
     bleManager.onDeviceDisconnected(connectedDevice.id, (error, device) => {
-      console.log('DISCONNECTED!!', error);
+      console.log("DISCONNECTED!!", error);
 
       if (this.shouldNotifyWhenConnected) {
         callback();
@@ -92,31 +80,19 @@ export default class BleConnection {
     });
   }
 
-  //
-
-  sendColor(color) {
+  sendMessage(message) {
     if (!connectedDevice) {
       return;
     }
+    const msg = base64.encode(message);
 
-    const { r, g, b } = rawHSVtoRGB(color);
-    const a = 255;
-
-    const msg = base64.encode(`${r}-${g}-${b}-${a}-`);
-
-    // send info to device
     bleManager
-      .writeCharacteristicWithResponseForDevice(
-        connectedDevice?.id,
-        SerialServiceUUID,
-        SerialCharacteristicUUID,
-        msg
-      )
+      .writeCharacteristicWithResponseForDevice(connectedDevice?.id, UART_SERVICE_UUID, UART_TX_CHARACTERISTIC_UUID, msg, null)
       .then((resp) => {
-        console.log('WRITE resp = ', resp);
+        console.log(`${connectedDevice.name} Response: ${resp}`);
       })
       .catch((err) => {
-        console.log('WRITE err = ', err);
+        console.log(`${connectedDevice.name} Error: ${err}`);
       });
   }
 }
