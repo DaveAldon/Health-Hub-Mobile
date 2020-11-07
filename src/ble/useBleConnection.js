@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
-import BleConnection from './ble-connection'
+import { useEffect, useState, useCallback, useRef } from "react";
+import BleConnection from "./ble-connection";
 
 export default function useBleConnection() {
   const bleConnection = useRef(new BleConnection());
@@ -16,17 +16,17 @@ export default function useBleConnection() {
 
     setCurrentDevice(device);
 
-    console.log('CONNECT TO DEVICE = ', device);
+    console.log("CONNECT TO DEVICE = ", device.name);
 
     bleConnection.current
       .connect(device)
       .then(() => {
-        console.log('Connection established!');
+        console.log("Connection established!");
 
         setIsConnected(true);
       })
       .catch((err) => {
-        console.log('Connection error = ', err);
+        console.log("Connection error = ", err);
 
         setIsConnected(false);
 
@@ -48,28 +48,23 @@ export default function useBleConnection() {
 
   function disconnect() {
     if (isConnected) {
-      console.log('BLE disconnect');
-
+      console.log("BLE disconnect");
       bleConnection.current.disconnect();
-
       setIsConnected(false);
-
       setCurrentDevice(null);
     }
   }
 
   function onNewPairedDevice(device) {
     setIsConnected(true);
-
     setCurrentDevice(device);
   }
 
   // this should be moved to separate module
   // (as it is not about making a connection)
-  function sendColor(color) {
-    console.log('SEND THIS COLOR = ', color);
-
-    bleConnection.current.sendColor(color);
+  function sendMessage(message) {
+    console.log(`Sending message: ${message}`);
+    bleConnection.current.sendMessage(message);
   }
 
   function stopConnecting() {
@@ -84,6 +79,6 @@ export default function useBleConnection() {
     isConnected,
     currentDevice,
     onNewPairedDevice,
-    sendColor
+    sendMessage,
   };
 }

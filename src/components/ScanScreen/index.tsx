@@ -2,11 +2,11 @@ import React, { useEffect, useCallback } from "react";
 import useBleScanning from "../../ble/useBleScanning";
 import useBleConnection from "../../ble/useBleConnection";
 import ScanDevicesScreen from "./Screen";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text } from "react-native";
 
 const ScanDevicesScreenContainer = ({ onDeviceConnected, onClose }) => {
   const { devices } = useBleScanning();
-  console.log("here", devices);
+  //console.log("here", devices);
 
   const { isConnected, isConnecting, connectToDevice, stopConnecting, currentDevice } = useBleConnection();
 

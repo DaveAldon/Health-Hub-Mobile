@@ -37,7 +37,7 @@ const ScanDevicesScreen = ({ devices, onClose, onDevicePress, isConnecting, curr
         <List
           data={devices}
           renderItem={({ item, index }) => (
-            <View style={{ height: 50, backgroundColor: "red", marginVertical: 10, borderRadius: 10 }}>
+            <View style={{ marginVertical: 10 }}>
               <DeviceItem key={index} name={item.name} onSelect={() => onDevicePress(item)} isPairing={isConnecting && item.name === currentDevice?.name} isLastElem={index === devices.length - 1} />
             </View>
           )}
@@ -52,7 +52,5 @@ const ScanDevicesScreen = ({ devices, onClose, onDevicePress, isConnecting, curr
     </View>
   );
 };
-
-//
 
 export default ScanDevicesScreen;
