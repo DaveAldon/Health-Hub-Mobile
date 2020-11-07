@@ -9,13 +9,11 @@ let connectedDevice = null;
 const UART_SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
 const SerialCharacteristicUUID = "0000dfb1-0000-1000-8000-00805f9b34fb";
 const UART_TX_CHARACTERISTIC_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
-//
-// Ugly(!!!!) wrapper for bleManager
-//
+
+
 export default class BleConnection {
   // to prevent leaks (callback when component is unmounted)
   shouldNotifyWhenConnected;
-  //
 
   constructor() {
     this.shouldNotifyWhenConnected = false;
