@@ -1,12 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 
-//
-
 const DEVICES_KEY = 'DEVICES_KEY';
 const CURRENT_DEVICE_KEY = 'CURRENT_DEVICE_KEY';
-
-//
 
 export default function useBleStorage() {
   const [devices, setDevices] = useState([]);

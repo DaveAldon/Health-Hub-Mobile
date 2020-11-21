@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import BleScanning from './ble-scanning';
+import { iDevice } from "../types/interfaces";
 
 const useBleScanning = () => {
   const bleScanning = useRef(new BleScanning());
@@ -7,7 +8,7 @@ const useBleScanning = () => {
   const [devices, setDevices] = useState([]);
 
   const addNewDevice = useCallback(
-    (device) => {
+    (device: iDevice) => {
       if (!devices.find((d) => d.id === device.id)) {
         setDevices([...devices, device]);
 

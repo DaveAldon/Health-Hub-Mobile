@@ -3,6 +3,7 @@ import useBleScanning from "../../ble/useBleScanning";
 import useBleConnection from "../../ble/useBleConnection";
 import ScanDevicesScreen from "./Screen";
 import { View, Text } from "react-native";
+import { iDevice } from "../../types/interfaces";
 
 const ScanDevicesScreenContainer = ({ onDeviceConnected, onClose }) => {
   const { devices } = useBleScanning();
@@ -22,11 +23,9 @@ const ScanDevicesScreenContainer = ({ onDeviceConnected, onClose }) => {
     return () => stopConnecting();
   }, [stopConnecting]);
 
-  //
-
-  function onDevicePress(device) {
+  function onDevicePress(device: iDevice) {
     if (!isConnecting) {
-      console.log("connectToDevice");
+      console.log(`connect To Device: ${device.name}`);
       connectToDevice(device);
     }
   }

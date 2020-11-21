@@ -1,19 +1,7 @@
 import React, { useEffect, useCallback } from "react";
-import { ActivityIndicator, LayoutAnimation, Text, View, TouchableOpacity } from "react-native";
+import { ActivityIndicator, LayoutAnimation, Text, View, TouchableOpacity, FlatList } from "react-native";
+import { iDevice } from "../../types/interfaces";
 import DeviceItem from "../DeviceItem";
-import { Container, ExitButton, Scanning, ScanningText, List } from "./styled";
-
-const LayoutAnimOpacity = {
-  duration: 150,
-  create: {
-    type: LayoutAnimation.Types.easeInEaseOut,
-    property: LayoutAnimation.Properties.opacity,
-  },
-  delete: {
-    type: LayoutAnimation.Types.easeInEaseOut,
-    property: LayoutAnimation.Properties.opacity,
-  },
-};
 
 const ScanDevicesScreen = ({ devices, onClose, onDevicePress, isConnecting, currentDevice }) => {
   return (
@@ -34,18 +22,18 @@ const ScanDevicesScreen = ({ devices, onClose, onDevicePress, isConnecting, curr
         );
       })} */}
       {
-        <List
+        <FlatList
           data={devices}
-          renderItem={({ item, index }) => (
+          renderItem={({ item, index }: { item: iDevice; index: number }) => (
             <View style={{ marginVertical: 10 }}>
-              <DeviceItem key={index} name={item.name} onSelect={() => onDevicePress(item)} isPairing={isConnecting && item.name === currentDevice?.name} isLastElem={index === devices.length - 1} />
+              <DeviceItem key={index} device={item} onSelect={() => onDevicePress(item)} isPairing={isConnecting && item.name === currentDevice?.name} isLastElem={index === devices.length - 1} />
             </View>
           )}
           ListFooterComponent={() => (
-            <Scanning>
+            <View>
               <ActivityIndicator color={"black"} />
               <Text>{"Scanning..."}</Text>
-            </Scanning>
+            </View>
           )}
         />
       }
