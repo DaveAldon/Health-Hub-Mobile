@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import BleScanning from './ble-scanning';
-import { iDevice } from "../types/interfaces";
+import { iDevice } from "../standards/interfaces";
 
 const useBleScanning = () => {
   const bleScanning = useRef(new BleScanning());

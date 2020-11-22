@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { iDevice } from "../../types/interfaces";
+import { iDevice } from "../../standards/interfaces";
 
 const DeviceItem = ({ device, onSelect, isPairing, isLastElem }: {device: iDevice, onSelect: any, isPairing: boolean, isLastElem: boolean}) => {
   return (

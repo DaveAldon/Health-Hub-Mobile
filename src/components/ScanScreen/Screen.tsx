@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { ActivityIndicator, LayoutAnimation, Text, View, TouchableOpacity, FlatList } from "react-native";
-import { iDevice } from "../../types/interfaces";
+import { iDevice } from "../../standards/interfaces";
 import DeviceItem from "../DeviceItem";
 
 const ScanDevicesScreen = ({ devices, onClose, onDevicePress, isConnecting, currentDevice }) => {

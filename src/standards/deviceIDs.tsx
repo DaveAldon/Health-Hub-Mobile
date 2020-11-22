@@ -1,0 +1,8 @@
+export const raspberryPi = {
+  UART_SERVICE_UUID: "6e400001-b5a3-f393-e0a9-e50e24dcca9e",
+  SerialCharacteristicUUID: "0000dfb1-0000-1000-8000-00805f9b34fb",
+  UART_RX_CHARACTERISTIC_UUID: "6e400002-b5a3-f393-e0a9-e50e24dcca9e",
+  UART_TX_CHARACTERISTIC_UUID: "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
+}
+
+

@@ -1,15 +1,10 @@
 import { bleManager } from "../../App";
-import { HSVtoRGB, rawHSVtoRGB } from "../theme/colors";
 // @ts-ignore
 import base64 from "react-native-base64";
+import * as deviceIds from "../standards/deviceIDs";
+import { iDevice } from "../standards/interfaces";
 
 let connectedDevice = null;
-
-// Device's Serial Port service and write charasteristic
-const UART_SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-const SerialCharacteristicUUID = "0000dfb1-0000-1000-8000-00805f9b34fb";
-const UART_TX_CHARACTERISTIC_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
-
 
 export default class BleConnection {
   // to prevent leaks (callback when component is unmounted)
@@ -19,7 +14,7 @@ export default class BleConnection {
     this.shouldNotifyWhenConnected = false;
   }
 
-  async connect(device) {
+  async connect(device: iDevice) {
     connectedDevice = device;
 
     this.shouldNotifyWhenConnected = true;
@@ -39,7 +34,7 @@ export default class BleConnection {
   }
 
   // optional to see all services and characteristics
-  _showAllCharacteristics(device) {
+  _showAllCharacteristics(device: iDevice) {
     bleManager.servicesForDevice(device.id).then((services) => {
       console.log("SERVICES = ", services);
 
@@ -84,10 +79,30 @@ export default class BleConnection {
     }
     const msg = base64.encode(message);
 
+    /*     bleManager
+      .readCharacteristicForDevice(connectedDevice?.id, UART_SERVICE_UUID, UART_TX_CHARACTERISTIC_UUID, null)
+      .then((value) => {
+        console.log(value);
+      })
+      .catch((error) => {
+        console.log(error);
+      }); */
+
+    /*
+    bleManager.monitorCharacteristicForDevice(connectedDevice?.id, deviceIds.raspberryPi.UART_SERVICE_UUID, deviceIds.raspberryPi.UART_TX_CHARACTERISTIC_UUID, (error, characteristic) => {
+      if (error) {
+        console.log(JSON.stringify(error));
+        return;
+      }
+      console.log(base64.decode(characteristic.value));
+    });
+    */
+
     bleManager
-      .writeCharacteristicWithResponseForDevice(connectedDevice?.id, UART_SERVICE_UUID, UART_TX_CHARACTERISTIC_UUID, msg, null)
+      .writeCharacteristicWithResponseForDevice(connectedDevice?.id, deviceIds.raspberryPi.UART_SERVICE_UUID, deviceIds.raspberryPi.UART_RX_CHARACTERISTIC_UUID, msg, null)
       .then((resp) => {
         console.log(`${connectedDevice.name} Response: ${resp}`);
+        //console.log(resp);
       })
       .catch((err) => {
         console.log(`${connectedDevice.name} Error: ${err}`);
