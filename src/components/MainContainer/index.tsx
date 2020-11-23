@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import useBleDevices from "../../ble/useBleDevices";
 import ScanDevicesScreenContainer from "../ScanScreen";
 import { iDevice } from "../../standards/interfaces";
@@ -15,6 +15,7 @@ enum messageType {
 interface iMessage {
   message: string;
   from: string;
+  time: string;
 }
 
 const MainContainer = () => {
@@ -42,11 +43,18 @@ const MainContainer = () => {
   };
 
   function updateMessages(message: String, messageType: messageType) {
+    let date = new Date();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let timeStamp = `${hours}:${minutes}`;
     let tmpMsg = messages;
+
     tmpMsg.push({
       message: message,
       from: messageType,
+      time: timeStamp,
     });
+
     setMessages(tmpMsg);
     forceUpdate();
   }
@@ -63,35 +71,46 @@ const MainContainer = () => {
     updateMessages(message, messageType.FromPhone);
   };
 
-  const [value, onChangeText] = useState("Useless Placeholder");
+  const [value, onChangeText] = useState("");
 
   return (
     <View style={{ flex: 1 }}>
       {isScanning && <ScanDevicesScreenContainer onClose={() => setIsScanning(false)} onDeviceConnected={onNewDeviceConnected} />}
       {isConnected && !isScanning && (
-        <View>
+        <View style={{ padding: 10 }}>
           <Text style={{ fontSize: 20 }}>Connected to: {currentDevice.name}</Text>
           <TouchableOpacity
-            style={{ padding: 15, borderRadius: 10, backgroundColor: "#ebebeb" }}
+            style={{ padding: 15, borderRadius: 10, backgroundColor: "#ebebeb", margin: 5 }}
             onPress={() => {
               onMessageSend(value);
             }}
           >
             <Text>Send data</Text>
           </TouchableOpacity>
-          <View>
-            <TextInput style={{ height: 40, borderColor: "gray", borderWidth: 1 }} onChangeText={(text) => onChangeText(text)} value={value} />
+          <View style={{ margin: 5 }}>
+            <TextInput
+              style={{ height: 40, borderColor: "gray", borderWidth: 1, padding: 5, borderRadius: 10 }}
+              onChangeText={(text) => onChangeText(text)}
+              value={value}
+              placeholder={"Message to send"}
+              placeholderTextColor={"gray"}
+            />
           </View>
-          <View style={{ alignItems: "center" }}>
+          <ScrollView contentContainerStyle={{ alignItems: "center", paddingBottom: 100 }}>
             {messages &&
-              messages.map((value: iMessage, index: number) => (
-                <View style={{ backgroundColor: value.from ? "#ebebeb" : "#4293f5", borderRadius: 10, width: "90%", padding: 10, justifyContent: "center", margin: 5 }}>
-                  <Text style={{ color: value.from ? "black" : "white" }} key={index}>
-                    {value.message}
-                  </Text>
-                </View>
-              ))}
-          </View>
+              messages
+                .slice(0)
+                .reverse()
+                .map((value: iMessage, index: number) => (
+                  <View
+                    style={{ flexDirection: "row", backgroundColor: value.from ? "#ebebeb" : "#4293f5", borderRadius: 10, width: "90%", padding: 10, justifyContent: "space-between", margin: 5 }}
+                    key={index}
+                  >
+                    <Text style={{ color: value.from ? "black" : "white" }}>{value.message.replace(/^\s+|\s+$/g, "")}</Text>
+                    <Text style={{ color: value.from ? "black" : "white" }}>{value.time}</Text>
+                  </View>
+                ))}
+          </ScrollView>
         </View>
       )}
     </View>

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { SafeAreaView, View, Text, StatusBar, PermissionsAndroid } from "react-native";
+import { SafeAreaView, StatusBar, PermissionsAndroid } from "react-native";
 import { BleManager } from "react-native-ble-plx";
-
 import MainContainer from "./src/components/MainContainer";
 export const bleManager = new BleManager();
 
@@ -30,12 +29,6 @@ const App = () => {
       <StatusBar barStyle="light-content" />
       <SafeAreaView style={{ height: "100%" }}>
         <MainContainer />
-        {/* <View>
-          <Text>Learn More</Text>
-          <Text>
-            Read the docs to discover what to do next:
-          </Text>
-        </View> */}
       </SafeAreaView>
     </>
   );
