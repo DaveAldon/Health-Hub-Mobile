@@ -17,12 +17,12 @@
     "react-native": "0.63.3",
     "react-native-appstate-hook": "^1.0.4",
     "react-native-base64": "^0.1.0",
-    "react-native-ble-plx": "^2.0.1",
-    "styled-components": "^5.2.0"
+    "react-native-ble-plx": "^2.0.2",
+    "styled-components": "^5.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/runtime": "^7.8.4",
+    "@babel/core": "^7.12.8",
+    "@babel/runtime": "^7.12.5",
     "@react-native-community/eslint-config": "^1.1.0",
     "babel-jest": "^25.1.0",
     "eslint": "^6.5.1",

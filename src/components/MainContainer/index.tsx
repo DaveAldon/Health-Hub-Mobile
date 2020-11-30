@@ -39,13 +39,15 @@ const MainContainer = () => {
       }
       let message = base64.decode(characteristic.value);
       updateMessages(message, messageType.FromBLEDevice);
+      console.log(`Device Says: ${message}`);
     });
   };
 
   function updateMessages(message: String, messageType: messageType) {
     let date = new Date();
     let hours = date.getHours();
-    let minutes = date.getMinutes();
+    let minutes = date.getMinutes().toString();
+    if (minutes.length < 2) minutes = `0${minutes}`;
     let timeStamp = `${hours}:${minutes}`;
     let tmpMsg = messages;
 

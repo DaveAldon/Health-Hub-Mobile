@@ -8,7 +8,9 @@ export default function useBleDevices() {
 
   const bleStorage = useBleStorage();
 
-  const onBackground = useCallback(() => ble.disconnect(), [ble]);
+  const onBackground = useCallback(() => {
+    //ble.disconnect(), [ble]
+  });
   const onForeground = useCallback(() => {
     if (!ble.isConnected && !ble.isConnecting && bleStorage.currentDevice) {
       ble.connectToDevice(bleStorage.currentDevice);
