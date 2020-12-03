@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import useBleDevices from "../../ble/useBleDevices";
 import ScanDevicesScreenContainer from "../ScanScreen";
-import { iDevice } from "../../standards/interfaces";
+import { iDevice, IProp } from "../../standards/interfaces";
 import { bleManager } from "../../../App";
 import * as deviceIds from "../../standards/deviceIDs";
 import base64 from "react-native-base64";
+import { Header } from "../header";
 
 enum messageType {
   "FromBLEDevice",
@@ -18,7 +19,7 @@ interface iMessage {
   time: string;
 }
 
-const MainContainer = () => {
+const MainContainer = (props: IProp) => {
   const { devices, currentDevice, isConnected, isConnecting, connectToDevice, onNewDevicePaired, removeDevice, sendMessageToCurrentDevice } = useBleDevices();
   const [isScanning, setIsScanning] = useState(true);
   const [messages, setMessages] = useState([]);
@@ -77,6 +78,7 @@ const MainContainer = () => {
 
   return (
     <View style={{ flex: 1 }}>
+      <Header {...props} />
       {isScanning && <ScanDevicesScreenContainer onClose={() => setIsScanning(false)} onDeviceConnected={onNewDeviceConnected} />}
       {isConnected && !isScanning && (
         <View style={{ padding: 10 }}>
