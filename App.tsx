@@ -1,11 +1,14 @@
+import "react-native-gesture-handler";
 import React, { useEffect } from "react";
-import { SafeAreaView, StatusBar, PermissionsAndroid } from "react-native";
+import { SafeAreaView, StatusBar, PermissionsAndroid, Platform } from "react-native";
 import { BleManager, Device, BleError, Subscription, State } from "react-native-ble-plx";
 import MainContainer from "./src/components/MainContainer";
 import { iDevice } from "./src/standards/interfaces";
 //import Background from "./src/standards/Background";
 import base64 from "react-native-base64";
 import * as deviceIds from "./src/standards/deviceIDs";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 export const bleManager = new BleManager({
   restoreStateIdentifier: "BleInTheBackground",
@@ -34,33 +37,39 @@ export const bleManager = new BleManager({
   },
 });
 
+const Stack = createStackNavigator();
+
 const App = () => {
   useEffect(() => {
     (async () => {
-      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
-        title: "Permission Localisation Bluetooth",
-        message: "Requirement for Bluetooth",
-        buttonNeutral: "Later",
-        buttonNegative: "Cancel",
-        buttonPositive: "OK",
-      });
-      const grantedCoarse = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION, {
-        title: "Permission Localisation Bluetooth",
-        message: "Requirement for Bluetooth",
-        buttonNeutral: "Later",
-        buttonNegative: "Cancel",
-        buttonPositive: "OK",
-      });
+      if (Platform.OS === "android") {
+        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+          title: "Permission Localisation Bluetooth",
+          message: "Requirement for Bluetooth",
+          buttonNeutral: "Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK",
+        });
+        const grantedCoarse = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION, {
+          title: "Permission Localisation Bluetooth",
+          message: "Requirement for Bluetooth",
+          buttonNeutral: "Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK",
+        });
+      }
     })();
   }, []);
 
   return (
-    <>
+    <NavigationContainer>
       <StatusBar barStyle="light-content" />
       <SafeAreaView style={{ height: "100%" }}>
-        <MainContainer />
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={MainContainer} />
+        </Stack.Navigator>
       </SafeAreaView>
-    </>
+    </NavigationContainer>
   );
 };
 
