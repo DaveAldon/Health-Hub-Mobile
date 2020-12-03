@@ -9,7 +9,8 @@ target 'firstapp' do
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'react-native-ble-plx', :path => '../node_modules/react-native-ble-plx'
-
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+  
   target 'firstappTests' do
     inherit! :complete
     # Pods for testing

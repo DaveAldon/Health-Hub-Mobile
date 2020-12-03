@@ -1,14 +1,18 @@
 import "react-native-gesture-handler";
 import React, { useEffect } from "react";
-import { SafeAreaView, StatusBar, PermissionsAndroid, Platform } from "react-native";
+import { SafeAreaView, StatusBar, PermissionsAndroid, Platform, View, Text } from "react-native";
 import { BleManager, Device, BleError, Subscription, State } from "react-native-ble-plx";
 import MainContainer from "./src/components/MainContainer";
+import LoginScreen from "./src/components/Login";
 import { iDevice } from "./src/standards/interfaces";
 //import Background from "./src/standards/Background";
 import base64 from "react-native-base64";
 import * as deviceIds from "./src/standards/deviceIDs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { IProp } from "./src/standards/interfaces";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { Entypo } from "react-native-vector-icons";
 
 export const bleManager = new BleManager({
   restoreStateIdentifier: "BleInTheBackground",
@@ -38,6 +42,7 @@ export const bleManager = new BleManager({
 });
 
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 const App = () => {
   useEffect(() => {
@@ -61,12 +66,21 @@ const App = () => {
     })();
   }, []);
 
+  function DrawerContainer() {
+    return (
+      <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen name="Home" component={MainContainer} />
+      </Drawer.Navigator>
+    );
+  }
+
   return (
     <NavigationContainer>
       <StatusBar barStyle="light-content" />
       <SafeAreaView style={{ height: "100%" }}>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={MainContainer} />
+        <Stack.Navigator initialRouteName="HealthHub">
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="HealthHub" component={DrawerContainer} options={{ headerShown: true }} />
         </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>

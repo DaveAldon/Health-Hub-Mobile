@@ -132,3 +132,8 @@ Note that you need to run on a physical device or else the bluetooth functionali
   cd ios
   pod update MultiplatformBleAdapter
   ```
+- ##### 'Multiple commands produce X' error when building in XCode
+  Solution:
+  ```
+  Select app target in XCode -> Build Phases -> Remove all font files installed via React-Native-Vector-Icons package linking, and then rebuild
+  ```
