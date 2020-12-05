@@ -79,6 +79,16 @@ export default class BleConnection {
     }
     const msg = base64.encode(message);
 
+    bleManager
+      .writeCharacteristicWithResponseForDevice(connectedDevice?.id, deviceIds.raspberryPi.UART_SERVICE_UUID, deviceIds.raspberryPi.UART_RX_CHARACTERISTIC_UUID, msg, null)
+      .then((resp) => {
+        console.log(`${connectedDevice.name} Response: ${resp}`);
+        //console.log(resp);
+      })
+      .catch((err) => {
+        console.log(`${connectedDevice.name} Error: ${err}`);
+      });
+
     /*     bleManager
       .readCharacteristicForDevice(connectedDevice?.id, UART_SERVICE_UUID, UART_TX_CHARACTERISTIC_UUID, null)
       .then((value) => {
@@ -97,15 +107,5 @@ export default class BleConnection {
       console.log(base64.decode(characteristic.value));
     });
     */
-
-    bleManager
-      .writeCharacteristicWithResponseForDevice(connectedDevice?.id, deviceIds.raspberryPi.UART_SERVICE_UUID, deviceIds.raspberryPi.UART_RX_CHARACTERISTIC_UUID, msg, null)
-      .then((resp) => {
-        console.log(`${connectedDevice.name} Response: ${resp}`);
-        //console.log(resp);
-      })
-      .catch((err) => {
-        console.log(`${connectedDevice.name} Error: ${err}`);
-      });
   }
 }

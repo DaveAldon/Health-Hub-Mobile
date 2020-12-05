@@ -100,8 +100,8 @@ const App = () => {
           );
         }}
       >
-        <Drawer.Screen name="Home">{(props) => <MainContainer {...props} />}</Drawer.Screen>
-        <Drawer.Screen name="Settings">{(props) => <SettingsScreen {...props} />}</Drawer.Screen>
+        <Drawer.Screen name="Home">{(props: IProp) => <MainContainer {...props} />}</Drawer.Screen>
+        <Drawer.Screen name="Settings">{(props: IProp) => <SettingsScreen {...props} />}</Drawer.Screen>
       </Drawer.Navigator>
     );
   }

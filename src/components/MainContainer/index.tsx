@@ -7,6 +7,7 @@ import { bleManager } from "../../../App";
 import * as deviceIds from "../../standards/deviceIDs";
 import base64 from "react-native-base64";
 import { Header } from "../header";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 enum messageType {
   "FromBLEDevice",
@@ -19,10 +20,26 @@ interface iMessage {
   time: string;
 }
 
+function getBatteryIcon(level: number) {
+  switch (true) {
+    case level >= 90:
+      return <FontAwesome name="battery" size={24} color="black" />;
+    case level >= 75:
+      return <FontAwesome name="battery-3" size={24} color="black" />;
+    case level >= 50:
+      return <FontAwesome name="battery-2" size={24} color="black" />;
+    case level >= 15:
+      return <FontAwesome name="battery-1" size={24} color="black" />;
+    case level >= 0:
+      return <FontAwesome name="battery-0" size={24} color="black" />;
+  }
+}
+
 const MainContainer = (props: IProp) => {
   const { devices, currentDevice, isConnected, isConnecting, connectToDevice, onNewDevicePaired, removeDevice, sendMessageToCurrentDevice } = useBleDevices();
   const [isScanning, setIsScanning] = useState(true);
   const [messages, setMessages] = useState([]);
+  const [battery, setBattery] = useState(0);
 
   const [, updateState] = useState({});
   const forceUpdate = useCallback(() => updateState({}), []);
@@ -39,8 +56,18 @@ const MainContainer = (props: IProp) => {
         return;
       }
       let message = base64.decode(characteristic.value);
+
       updateMessages(message, messageType.FromBLEDevice);
       console.log(`Device Says: ${message}`);
+    });
+
+    bleManager.monitorCharacteristicForDevice(currentDevice?.id, deviceIds.raspberryPi.UART_SERVICE_UUID, deviceIds.raspberryPi.UART_BATTERY_CHARACTERISTIC_UUID, (error, characteristic) => {
+      if (error) {
+        console.log(JSON.stringify(error));
+        return;
+      }
+      let message = base64.decode(characteristic.value);
+      setBattery(message);
     });
   };
 
@@ -82,7 +109,14 @@ const MainContainer = (props: IProp) => {
       {isScanning && <ScanDevicesScreenContainer onClose={() => setIsScanning(false)} onDeviceConnected={onNewDeviceConnected} />}
       {isConnected && !isScanning && (
         <View style={{ padding: 10 }}>
-          <Text style={{ fontSize: 20 }}>Connected to: {currentDevice.name}</Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+            <Text style={{ fontSize: 20 }}>Connected to: {currentDevice.name}</Text>
+
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: 70 }}>
+              <Text style={{ marginRight: 5 }}>{getBatteryIcon(battery)}</Text>
+              <Text>{battery}%</Text>
+            </View>
+          </View>
           <TouchableOpacity
             style={{ padding: 15, borderRadius: 10, backgroundColor: "#ebebeb", margin: 5 }}
             onPress={() => {
