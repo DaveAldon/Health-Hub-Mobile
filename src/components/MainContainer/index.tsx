@@ -45,12 +45,13 @@ const MainContainer = (props: IProp) => {
   const forceUpdate = useCallback(() => updateState({}), []);
 
   const onNewDeviceConnected = (device: iDevice) => {
+    console.log(device.id);
     setIsScanning(false);
 
     onNewDevicePaired(device);
 
     // subscription to the read characteristic
-    bleManager.monitorCharacteristicForDevice(currentDevice?.id, deviceIds.raspberryPi.UART_SERVICE_UUID, deviceIds.raspberryPi.UART_TX_CHARACTERISTIC_UUID, (error, characteristic) => {
+    bleManager.monitorCharacteristicForDevice(device.id, deviceIds.raspberryPi.UART_SERVICE_UUID, deviceIds.raspberryPi.UART_TX_CHARACTERISTIC_UUID, (error, characteristic) => {
       if (error) {
         console.log(JSON.stringify(error));
         return;
@@ -61,7 +62,7 @@ const MainContainer = (props: IProp) => {
       console.log(`Device Says: ${message}`);
     });
 
-    bleManager.monitorCharacteristicForDevice(currentDevice?.id, deviceIds.raspberryPi.UART_SERVICE_UUID, deviceIds.raspberryPi.UART_BATTERY_CHARACTERISTIC_UUID, (error, characteristic) => {
+    bleManager.monitorCharacteristicForDevice(device.id, deviceIds.raspberryPi.UART_SERVICE_UUID, deviceIds.raspberryPi.UART_BATTERY_CHARACTERISTIC_UUID, (error, characteristic) => {
       if (error) {
         console.log(JSON.stringify(error));
         return;
@@ -117,6 +118,15 @@ const MainContainer = (props: IProp) => {
               <Text>{battery}%</Text>
             </View>
           </View>
+          <TouchableOpacity
+            style={{ padding: 15, borderRadius: 10, backgroundColor: "#eb5757", margin: 5 }}
+            onPress={() => {
+              setIsScanning(true);
+              removeDevice(currentDevice);
+            }}
+          >
+            <Text style={{ color: "white" }}>Disconnect</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={{ padding: 15, borderRadius: 10, backgroundColor: "#ebebeb", margin: 5 }}
             onPress={() => {

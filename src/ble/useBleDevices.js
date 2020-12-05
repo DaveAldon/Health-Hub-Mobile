@@ -51,7 +51,6 @@ export default function useBleDevices() {
       ble.disconnect();
       bleStorage.setCurrentDevice(null);
     }
-
     bleStorage.removeDevice(device);
   }
 
