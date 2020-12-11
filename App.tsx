@@ -5,6 +5,7 @@ import { BleManager, Device, BleError, Subscription, State } from "react-native-
 import MainContainer from "./src/components/MainContainer";
 import SettingsScreen from "./src/components/Settings";
 import LoginScreen from "./src/components/Login";
+import GraphScreen from "./src/components/GraphScreen";
 import { iDevice } from "./src/standards/interfaces";
 //import Background from "./src/standards/Background";
 import base64 from "react-native-base64";
@@ -16,6 +17,7 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@rea
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Entypo from "react-native-vector-icons/Entypo";
 
 export const bleManager = new BleManager({
   restoreStateIdentifier: "BleInTheBackground",
@@ -73,7 +75,7 @@ const App = () => {
   function DrawerContainer() {
     return (
       <Drawer.Navigator
-        initialRouteName="Home"
+        initialRouteName="Graph"
         drawerType="slide"
         drawerContent={(props) => {
           // If you don't cancel the initial render, the drawer will flash on the screen
@@ -86,6 +88,7 @@ const App = () => {
               <View style={{ flex: 1, flexDirection: "column", justifyContent: "flex-start" }}>
                 <DrawerItem labelStyle={[{}]} label="Health Hub" onPress={() => props.navigation.navigate("Home")} icon={() => <Feather name="monitor" size={30} color="black" />} />
                 <DrawerItem labelStyle={[{}]} label="Settings" onPress={() => props.navigation.navigate("Settings")} icon={() => <FontAwesome name="gear" size={35} color="black" />} />
+                <DrawerItem labelStyle={[{}]} label="Graph" onPress={() => props.navigation.navigate("Graph")} icon={() => <Entypo name="line-graph" size={35} color="black" />} />
                 <DrawerItem
                   labelStyle={[{}]}
                   label="Logout"
@@ -102,6 +105,7 @@ const App = () => {
       >
         <Drawer.Screen name="Home">{(props: IProp) => <MainContainer {...props} />}</Drawer.Screen>
         <Drawer.Screen name="Settings">{(props: IProp) => <SettingsScreen {...props} />}</Drawer.Screen>
+        <Drawer.Screen name="Graph">{(props: IProp) => <GraphScreen {...props} />}</Drawer.Screen>
       </Drawer.Navigator>
     );
   }
