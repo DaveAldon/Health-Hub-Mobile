@@ -5,7 +5,7 @@ import { BleManager, Device, BleError, Subscription, State } from "react-native-
 import MainContainer from "./src/components/MainContainer";
 import SettingsScreen from "./src/components/Settings";
 import LoginScreen from "./src/components/Login";
-import GraphScreen from "./src/components/GraphScreen";
+import GraphScreen from "./src/components/Graphs/GraphScreen";
 import { iDevice } from "./src/standards/interfaces";
 //import Background from "./src/standards/Background";
 import base64 from "react-native-base64";

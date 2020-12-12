@@ -3,15 +3,21 @@ import { IECGData } from "../standards/interfaces";
 export default function ECG_Data() {
   let formattedData = [];
   const data = JSON.parse(getDataString());
-  let max = 300;
+  let max = 1000;
   let counter = 0;
+  let skipCounter = 1;
   data.forEach((value) => {
-    if (counter < max) {
-      formattedData.push(Object.values(value));
+    if (skipCounter > 7) {
+      if (counter < max) {
+        formattedData.push(Object.values(value));
+        counter++;
+      }
+      skipCounter = 1;
+    } else {
+      skipCounter++;
       counter++;
     }
   });
-
   return formattedData;
 }
 // https://jsonformatter.org/bd7537
