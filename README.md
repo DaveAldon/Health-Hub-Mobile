@@ -117,6 +117,14 @@ Note that you need to run on a physical device or else the bluetooth functionali
   react-native bundle --entry-file index.tsx --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios
   react-native run-ios --device
   ```
+  If you run the above command, even with sudo, and get a permissions issue that includes something like this:
+  ```
+  watchmanResponse: {
+    error: 'resolve_projpath: path `PATH/Health Hub`: open: PATH/Health Hub: Operation not permitted',
+    version: '4.9.0'
+  }
+  ```
+  Give watchmen full disk access in System Preferences (System Preferences -> Security & Privacy -> Privacy -> Full Disk Access)
 - ##### run-ios "ios-deploy" permissions error
   Solution:
   ```
@@ -136,4 +144,14 @@ Note that you need to run on a physical device or else the bluetooth functionali
   Solution:
   ```
   Select app target in XCode -> Build Phases -> Remove all font files installed via React-Native-Vector-Icons package linking, and then rebuild
+  ```
+  ##### 'Could not connect to development server' when running in simulator
+  Solution:
+  ```
+  sudo lsof -i :8081
+  kill -9 <PROCESS_ID>
+  ```
+  These are conflicting with the default 8081 ports. You can also run RN on a different port if you wish via:
+  ```
+  react-native start --port=8088
   ```

@@ -26,10 +26,16 @@ const GraphScreen = (props: IProp) => {
   return (
     <View style={{ flex: 1 }}>
       <Header {...props} />
-      <ScrollView horizontal={true}>
-        <LineChartECG {...ECGConfigScroll} />
-      </ScrollView>
-      <LineChartECG {...ECGConfig} />
+      <View style={{ flex: 1, paddingTop: 10 }}>
+        <View style={{ height: 300 }}>
+          <ScrollView style={{}} horizontal={true}>
+            <LineChartECG {...ECGConfigScroll} />
+          </ScrollView>
+        </View>
+        <View style={{ height: 300 }}>
+          <LineChartECG {...ECGConfig} />
+        </View>
+      </View>
     </View>
   );
 };
