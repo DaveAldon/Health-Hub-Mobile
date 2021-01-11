@@ -9,11 +9,25 @@ interface IProp {
   live: boolean;
 }
 
+interface IyAxis {
+  item: {
+    value: string;
+  };
+}
+
+interface IxAxis {
+  item: {
+    timestamp: number;
+  };
+  index: number;
+}
+
 export default function LineChartECG(props: IProp) {
   const { data, width, height, live } = props;
-  const [ECGData, setECGData] = useState([0]);
+  const [ECGData, setECGData] = useState([]);
   const [seconds, setSeconds] = useState(0);
-  const StaticData = [].concat.apply([], data);
+
+  const StaticData = data;
 
   useEffect(() => {
     if (live) {
@@ -24,7 +38,7 @@ export default function LineChartECG(props: IProp) {
           if (data[seconds] === undefined) {
             setSeconds(0);
           } else {
-            tmpECG.push(parseInt(data[seconds]));
+            tmpECG.push(data[seconds]);
           }
           if (tmpECG.length > 30) tmpECG.shift();
         } catch {
@@ -46,7 +60,7 @@ export default function LineChartECG(props: IProp) {
           style={{ padding: 15, borderRadius: 10, backgroundColor: "#ebebeb", margin: 5 }}
           onPress={() => {
             setSeconds(0);
-            setECGData([0]);
+            setECGData([]);
           }}
         >
           <Text>Reset - Interval {seconds}</Text>
@@ -57,6 +71,9 @@ export default function LineChartECG(props: IProp) {
           style={{ height: "100%", width: 30 }}
           contentInset={contentInset}
           data={live ? ECGData : StaticData}
+          yAccessor={(item: IyAxis) => {
+            return item.item.value;
+          }}
           svg={{
             fill: "grey",
             fontSize: 10,
@@ -64,14 +81,30 @@ export default function LineChartECG(props: IProp) {
           numberOfTicks={10}
           formatLabel={(value) => `${value}`}
         />
-        <LineChart style={{ height: "100%", width: width }} data={live ? ECGData : StaticData} svg={{ stroke: "rgb(134, 65, 244)" }} contentInset={contentInset}>
+        <LineChart
+          style={{ height: "100%", width: width }}
+          data={live ? ECGData : StaticData}
+          svg={{ stroke: "rgb(134, 65, 244)" }}
+          contentInset={contentInset}
+          yAccessor={(item: IyAxis) => {
+            return item.item.value;
+          }}
+          xAccessor={(item: IxAxis) => {
+            return item.index;
+          }}
+        >
           <Grid />
         </LineChart>
       </View>
       <XAxis
         style={{ height: "10%", width: "100%" }}
         data={live ? ECGData : StaticData}
-        formatLabel={(label, index) => `${getFormatedLabel(label, index)}`}
+        formatLabel={(label, index) => {
+          return `${getFormatedLabel(label, index)}`;
+        }}
+        xAccessor={(item: IxAxis) => {
+          return item.item.timestamp;
+        }}
         contentInset={{ left: 33 }}
         svg={{ fontSize: 10, fill: "black" }}
       />
@@ -80,9 +113,14 @@ export default function LineChartECG(props: IProp) {
 }
 
 function getFormatedLabel(label, index) {
+  //return index;
   if (index % 5 === 0) {
     return `${label}s`; //moment(label).format('HH [h]');
   } else {
     return "";
   }
+}
+
+function getRand() {
+  return Math.floor(Math.random() * 10) + 1;
 }

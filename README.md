@@ -145,7 +145,7 @@ Note that you need to run on a physical device or else the bluetooth functionali
   ```
   Select app target in XCode -> Build Phases -> Remove all font files installed via React-Native-Vector-Icons package linking, and then rebuild
   ```
-  ##### 'Could not connect to development server' when running in simulator
+- ##### 'Could not connect to development server' when running in simulator
   Solution:
   ```
   sudo lsof -i :8081

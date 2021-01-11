@@ -6,7 +6,6 @@ import ECG_Data from "../../hooks/SampleECG";
 import LineChartECG from "../Graphs/LineChart";
 
 const data = ECG_Data();
-
 const GraphScreen = (props: IProp) => {
   const navigation = props.navigation;
 

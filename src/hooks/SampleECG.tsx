@@ -6,11 +6,18 @@ export default function ECG_Data() {
   let max = 1000;
   let counter = 0;
   let skipCounter = 1;
-  data.forEach((value) => {
+  let index = 0;
+  data.forEach((datum) => {
     if (skipCounter > 7) {
       if (counter < max) {
-        formattedData.push(Object.values(value));
+        let value = parseInt(Object.values(datum));
+        let entry = {
+          timestamp: index,
+          value: value,
+        };
+        formattedData.push(entry);
         counter++;
+        index++;
       }
       skipCounter = 1;
     } else {
