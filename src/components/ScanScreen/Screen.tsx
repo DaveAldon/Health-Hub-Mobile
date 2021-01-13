@@ -29,12 +29,12 @@ const ScanDevicesScreen = ({ devices, onClose, onDevicePress, isConnecting, curr
               <DeviceItem key={index} device={item} onSelect={() => onDevicePress(item)} isPairing={isConnecting && item.name === currentDevice?.name} isLastElem={index === devices.length - 1} />
             </View>
           )}
-          ListFooterComponent={() => (
+          /*  ListFooterComponent={() => (
             <View>
               <ActivityIndicator color={"black"} />
               <Text>{"Scanning..."}</Text>
             </View>
-          )}
+          )} */
         />
       }
     </View>

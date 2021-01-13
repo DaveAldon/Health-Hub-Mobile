@@ -3,7 +3,7 @@ import BleScanning from "./ble-scanning";
 import { iDevice } from "../standards/interfaces";
 
 const useBleScanning = () => {
-  const bleScanning = useRef(new BleScanning());
+  let bleScanning = useRef(new BleScanning());
 
   const [devices, setDevices] = useState([]);
 
@@ -11,7 +11,6 @@ const useBleScanning = () => {
     (device: iDevice) => {
       if (!devices.find((d) => d.id === device.id)) {
         setDevices([...devices, device]);
-
         console.log("ADD DEVICE = ", device);
       }
     },
@@ -21,9 +20,6 @@ const useBleScanning = () => {
   const startScanning = useCallback(() => {
     console.log("scanning now");
     bleScanning.current.startScanning((device) => {
-      //console.log("is scanning")
-      //console.log('check DEVICE = ', device);
-
       addNewDevice({
         name: device.name ?? "",
         id: device.id ?? "",
@@ -35,10 +31,16 @@ const useBleScanning = () => {
     bleScanning.current.stopScanning();
   }
 
+  function refresh() {
+    setDevices([]);
+    bleScanning.current.startScanning();
+  }
+
   return {
     startScanning,
     stopScanning,
     devices,
+    refresh,
   };
 };
 
