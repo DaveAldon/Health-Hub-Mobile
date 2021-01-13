@@ -4,6 +4,7 @@ import useBleConnection from "../../ble/useBleConnection";
 import ScanDevicesScreen from "./Screen";
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { iDevice } from "../../standards/interfaces";
+import * as Keychain from "react-native-keychain";
 
 const ScanDevicesScreenContainer = ({ onDeviceConnected, onClose }) => {
   const { devices, startScanning, stopScanning } = useBleScanning();
@@ -15,12 +16,22 @@ const ScanDevicesScreenContainer = ({ onDeviceConnected, onClose }) => {
   const { isConnected, isConnecting, connectToDevice, stopConnecting, currentDevice } = useBleConnection();
 
   useEffect(() => {
-    if (allowScan) {
-      startScanning();
-    }
-    return () => {
-      stopScanning();
-    };
+    (async () => {
+      const uuids = await Keychain.getInternetCredentials("uuids");
+      setTextValue(uuids.password);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (allowScan) {
+        await Keychain.setInternetCredentials("uuids", "uuids", textValue);
+        startScanning();
+      }
+      return () => {
+        stopScanning();
+      };
+    })();
   }, [startScanning, allowScan]);
 
   // we have connected to a new device
@@ -45,14 +56,14 @@ const ScanDevicesScreenContainer = ({ onDeviceConnected, onClose }) => {
   return (
     <View style={{ flex: 1, padding: 10, justifyContent: "center", alignItems: "center" }}>
       <TextInput
-        style={{ height: 40, borderColor: "gray", borderWidth: 1, padding: 5, borderRadius: 10 }}
+        style={{ width: "100%", height: 40, borderColor: "gray", borderWidth: 1, padding: 5, borderRadius: 10, textAlign: "center", marginBottom: 20, backgroundColor: "white" }}
         onChangeText={(text) => setTextValue(text)}
         value={textValue}
         placeholder={"Service UUID"}
         placeholderTextColor={"gray"}
       />
       <TouchableOpacity
-        style={{ backgroundColor: "green", width: 100, height: 50, borderRadius: 10, justifyContent: "center", alignItems: "center" }}
+        style={{ backgroundColor: "green", width: "100%", height: 50, borderRadius: 10, justifyContent: "center", alignItems: "center" }}
         onPress={() => {
           setAllowScan(true);
         }}

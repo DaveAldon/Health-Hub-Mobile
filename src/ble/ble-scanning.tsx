@@ -1,5 +1,6 @@
 import { bleManager } from "../../App";
 import * as deviceIds from "../standards/deviceIDs";
+import * as Keychain from "react-native-keychain";
 
 // import { BleDevice } from '../useBleConnection/useBleConnection';
 
@@ -11,9 +12,9 @@ const FIXED_NAME = "BLUNO";
 // Wrapper for bleManager
 //
 export default class BleScanning {
-  startScanning(onNewDevice) {
-    console.log("in blescanning");
-    bleManager.startDeviceScan(["0000ec00-0000-1000-8000-00805f9b34fb"], { allowDuplicates: true }, (error, device) => {
+  async startScanning(onNewDevice) {
+    const uuids = await Keychain.getInternetCredentials("uuids");
+    bleManager.startDeviceScan([uuids.password], { allowDuplicates: true }, (error, device) => {
       // console.log("test", device)
       if (!device) return;
       if (!!device.name || !!device.localName) {
