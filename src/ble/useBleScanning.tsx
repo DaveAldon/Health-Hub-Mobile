@@ -33,6 +33,7 @@ const useBleScanning = () => {
 
   function refresh() {
     setDevices([]);
+    bleScanning.current.stopScanning();
     bleScanning.current.startScanning();
   }
 

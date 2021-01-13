@@ -9,12 +9,10 @@ export default class BleScanning {
     bleManager.startDeviceScan(filter, { allowDuplicates: true }, (error, device) => {
       if (!device) return;
       if (!!device.name || !!device.localName) {
-        try {
-          onNewDevice({
-            name: device.name ? device.name : "",
-            id: device.id ? device.id : "",
-          });
-        } catch {}
+        onNewDevice({
+          name: device.name ? device.name : "",
+          id: device.id ? device.id : "",
+        });
       }
     });
   }

@@ -53,11 +53,11 @@ const ScanDevicesScreenContainer = ({ onDeviceConnected, onClose }) => {
     }
   }
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (devices.length && textValue !== "empty") {
       setAllowScan(false);
     }
-  }, [devices]);
+  }, [devices]); */
 
   function scan() {
     refresh();
