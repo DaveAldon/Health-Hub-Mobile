@@ -75,7 +75,7 @@ const App = () => {
   function DrawerContainer() {
     return (
       <Drawer.Navigator
-        initialRouteName="Graph"
+        initialRouteName="Home"
         drawerType="slide"
         drawerContent={(props) => {
           // If you don't cancel the initial render, the drawer will flash on the screen

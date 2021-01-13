@@ -13,7 +13,7 @@ const FIXED_NAME = "BLUNO";
 export default class BleScanning {
   startScanning(onNewDevice) {
     console.log("in blescanning");
-    bleManager.startDeviceScan([deviceIds.raspberryPi.UART_SERVICE_UUID], { allowDuplicates: true }, (error, device) => {
+    bleManager.startDeviceScan(["0000ec00-0000-1000-8000-00805f9b34fb"], { allowDuplicates: true }, (error, device) => {
       // console.log("test", device)
       if (!device) return;
       if (!!device.name || !!device.localName) {

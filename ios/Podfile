@@ -11,6 +11,8 @@ target 'firstapp' do
   pod 'react-native-ble-plx', :path => '../node_modules/react-native-ble-plx'
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   
+  pod 'RNKeychain', :path => '../node_modules/react-native-keychain'
+
   target 'firstappTests' do
     inherit! :complete
     # Pods for testing

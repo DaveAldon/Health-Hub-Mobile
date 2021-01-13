@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 //import { LineChart } from "react-native-chart-kit";
 import { View, Text, TouchableOpacity, TextInput, ScrollView, Dimensions } from "react-native";
 import { LineChart, Grid, YAxis, XAxis } from "react-native-svg-charts";
+
 interface IProp {
   data: any;
   width: number;
