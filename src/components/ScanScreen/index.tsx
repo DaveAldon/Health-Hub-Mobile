@@ -5,15 +5,26 @@ import ScanDevicesScreen from "./Screen";
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { iDevice } from "../../standards/interfaces";
 import * as Keychain from "react-native-keychain";
+import { useBleConnectionContext, ActionsEnum } from "../../ble/bleConnectionContext";
 
 const ScanDevicesScreenContainer = ({ onDeviceConnected, onClose }) => {
   const { devices, startScanning, stopScanning, refresh } = useBleScanning();
   const [allowScan, setAllowScan] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   //console.log("here", devices);
 
   const [textValue, setTextValue] = useState("");
 
-  const { isConnected, isConnecting, connectToDevice, stopConnecting, currentDevice } = useBleConnection();
+  //const { isConnected, isConnecting, connectToDevice, stopConnecting, currentDevice } = useBleConnection();
+
+  const { state, dispatch } = useBleConnectionContext();
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -36,20 +47,23 @@ const ScanDevicesScreenContainer = ({ onDeviceConnected, onClose }) => {
 
   // we have connected to a new device
   useEffect(() => {
-    if (isConnected && currentDevice !== null) {
-      onDeviceConnected(currentDevice);
+    if (state.isConnected && state.currentDevice !== null) {
+      onDeviceConnected(state.currentDevice);
     }
-  }, [isConnected, currentDevice, onDeviceConnected]);
+  }, [state.isConnected, state.currentDevice, onDeviceConnected]);
 
   // stop connecting on unmount
   useEffect(() => {
-    return () => stopConnecting();
-  }, [stopConnecting]);
+    return () => {
+      if (!isMounted) dispatch({ type: ActionsEnum.STOP_CONNECTING });
+    };
+  }, [isMounted]);
 
   function onDevicePress(device: iDevice) {
-    if (!isConnecting) {
-      console.log(`connect To Device: ${device.name}`);
-      connectToDevice(device);
+    if (!state.isConnected) {
+      console.log(`connect To Device: ${device.id} ${device.name}`);
+      dispatch({ type: ActionsEnum.CONNECT_TO_DEVICE, payload: device });
+      //connectToDevice(device);
     }
   }
 
@@ -82,7 +96,7 @@ const ScanDevicesScreenContainer = ({ onDeviceConnected, onClose }) => {
         <Text style={{ color: "white" }}>Start Scan</Text>
       </TouchableOpacity>
       <View style={{ flex: 1, width: "100%" }}>
-        <ScanDevicesScreen devices={devices} onClose={onClose} onDevicePress={onDevicePress} isConnecting={isConnecting} currentDevice={currentDevice} />
+        <ScanDevicesScreen devices={devices} onClose={onClose} onDevicePress={onDevicePress} isConnecting={state.isConnecting} currentDevice={state.currentDevice} />
       </View>
     </View>
   );

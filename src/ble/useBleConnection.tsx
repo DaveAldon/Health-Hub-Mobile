@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, useContext, createContext } from "react";
 import BleConnection from "./ble-connection";
 
 export default function useBleConnection() {
@@ -8,6 +8,10 @@ export default function useBleConnection() {
   const [isConnecting, setIsConnecting] = useState(false);
 
   const [currentDevice, setCurrentDevice] = useState(null);
+
+  useEffect(() => {
+    //console.log(isConnected);
+  }, [isConnected]);
 
   function connectToDevice(device) {
     disconnect();

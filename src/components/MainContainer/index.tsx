@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, TouchableOpacity, TextInput, ScrollView } from "react-native";
-import useBleDevices from "../../ble/useBleDevices";
 import ScanDevicesScreenContainer from "../ScanScreen";
 import { iDevice, IProp } from "../../standards/interfaces";
 import { bleManager } from "../../../App";
@@ -8,6 +7,7 @@ import * as deviceIds from "../../standards/deviceIDs";
 import base64 from "react-native-base64";
 import { Header } from "../header";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useBleConnectionContext, ActionsEnum } from "../../ble/bleConnectionContext";
 
 enum messageType {
   "FromBLEDevice",
@@ -36,20 +36,16 @@ function getBatteryIcon(level: number) {
 }
 
 const MainContainer = (props: IProp) => {
-  const { devices, currentDevice, isConnected, isConnecting, connectToDevice, onNewDevicePaired, removeDevice, sendMessageToCurrentDevice } = useBleDevices();
   const [isScanning, setIsScanning] = useState(true);
   const [messages, setMessages] = useState([]);
   const [battery, setBattery] = useState(0);
-
   const [, updateState] = useState({});
   const forceUpdate = useCallback(() => updateState({}), []);
+  const [value, onChangeText] = useState("");
+  const { state, dispatch } = useBleConnectionContext();
 
   const onNewDeviceConnected = (device: iDevice) => {
-    console.log(device.id);
-    setIsScanning(false);
-
-    onNewDevicePaired(device);
-
+    dispatch({ type: ActionsEnum.ON_NEW_PAIRED_DEVICE, payload: device });
     // subscription to the read characteristic
     bleManager.monitorCharacteristicForDevice(device.id, deviceIds.raspberryPi.UART_SERVICE_UUID, deviceIds.raspberryPi.UART_TX_CHARACTERISTIC_UUID, (error, characteristic) => {
       if (error) {
@@ -70,6 +66,7 @@ const MainContainer = (props: IProp) => {
       let message = base64.decode(characteristic.value);
       setBattery(message);
     });
+    setIsScanning(false);
   };
 
   function updateMessages(message: String, messageType: messageType) {
@@ -90,28 +87,19 @@ const MainContainer = (props: IProp) => {
     forceUpdate();
   }
 
-  const onScanPress = () => {
-    setIsScanning(true);
-  };
-
-  const onDeviceSelect = (device: iDevice) => {
-    connectToDevice(device);
-  };
   const onMessageSend = (message: String) => {
-    sendMessageToCurrentDevice(message);
+    dispatch({ type: ActionsEnum.SEND_MESSAGE, payload: message });
     updateMessages(message, messageType.FromPhone);
   };
-
-  const [value, onChangeText] = useState("");
 
   return (
     <View style={{ flex: 1 }}>
       <Header {...props} />
       {isScanning && <ScanDevicesScreenContainer onClose={() => setIsScanning(false)} onDeviceConnected={onNewDeviceConnected} />}
-      {isConnected && !isScanning && (
+      {state.isConnected && !isScanning && (
         <View style={{ padding: 10 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-            <Text style={{ fontSize: 20 }}>Connected to: {currentDevice.name}</Text>
+            <Text style={{ fontSize: 20 }}>Connected to: {state.currentDevice.name}</Text>
 
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: 70 }}>
               <Text style={{ marginRight: 5 }}>{getBatteryIcon(battery)}</Text>
@@ -122,7 +110,8 @@ const MainContainer = (props: IProp) => {
             style={{ padding: 15, borderRadius: 10, backgroundColor: "#eb5757", margin: 5 }}
             onPress={() => {
               setIsScanning(true);
-              removeDevice(currentDevice);
+              dispatch({ type: ActionsEnum.REMOVE_DEVICE, payload: state.currentDevice });
+              dispatch({ type: ActionsEnum.DISCONNECT });
             }}
           >
             <Text style={{ color: "white" }}>Disconnect</Text>

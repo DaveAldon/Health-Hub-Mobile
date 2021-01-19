@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React, { useEffect } from "react";
+import React, { useEffect, createContext } from "react";
 import { SafeAreaView, StatusBar, PermissionsAndroid, Platform, View, Text, TouchableOpacity } from "react-native";
 import { BleManager, Device, BleError, Subscription, State } from "react-native-ble-plx";
 import MainContainer from "./src/components/MainContainer";
@@ -18,6 +18,9 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Entypo from "react-native-vector-icons/Entypo";
+import { BleConnectionProvider } from "./src/ble/bleConnectionContext";
+
+export const BleContext = createContext();
 
 export const bleManager = new BleManager({
   restoreStateIdentifier: "BleInTheBackground",
@@ -111,15 +114,17 @@ const App = () => {
   }
 
   return (
-    <NavigationContainer>
-      <StatusBar barStyle="light-content" />
-      <SafeAreaView style={{ height: "100%" }}>
-        <Stack.Navigator initialRouteName="HealthHub">
-          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="HealthHub" component={DrawerContainer} options={{ headerShown: false }} />
-        </Stack.Navigator>
-      </SafeAreaView>
-    </NavigationContainer>
+    <BleConnectionProvider>
+      <NavigationContainer>
+        <StatusBar barStyle="light-content" />
+        <SafeAreaView style={{ height: "100%" }}>
+          <Stack.Navigator initialRouteName="HealthHub">
+            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="HealthHub" component={DrawerContainer} options={{ headerShown: false }} />
+          </Stack.Navigator>
+        </SafeAreaView>
+      </NavigationContainer>
+    </BleConnectionProvider>
   );
 };
 
