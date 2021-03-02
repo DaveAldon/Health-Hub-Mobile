@@ -6,6 +6,14 @@
 - `git clone https://github.com/DaveAldon/Health-Hub-Mobile.git`
 - `npm install`
 
+## Run
+
+- `npx react-native run-ios --simulator="iPhone 12 Pro Max`
+
+## Build .app for Detox
+
+- `react-native run-ios --configuration=release`
+
 ##### Bluetooth plugin requires extra fiddling
 
 - ##### iOS
@@ -146,12 +154,30 @@ Note that you need to run on a physical device or else the bluetooth functionali
   Select app target in XCode -> Build Phases -> Remove all font files installed via React-Native-Vector-Icons package linking, and then rebuild
   ```
 - ##### 'Could not connect to development server' when running in simulator
+
   Solution:
+
   ```
   sudo lsof -i :8081
   kill -9 <PROCESS_ID>
   ```
+
   These are conflicting with the default 8081 ports. You can also run RN on a different port if you wish via:
+
   ```
   react-native start --port=8088
+  ```
+
+- ##### Building for iOS Simulator, but linking in object file built for iOS, for architecture arm64
+  Solution: You have to exclude arm64 for simulator architecture both from your project and the Pod project
+  - Navigate to Build Settings of your project and add `Any iOS Simulator SDK` with value `arm64` inside `Excluded Architecture`
+    ![arm64](documentation/arm64.png)
+  - Do the same for the Pod project
+  - Add the following to your pod file so that the settings aren't overwritten the next time you run `pod install`:
+  ```
+  post_install do |installer|
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+    end
+  end
   ```
