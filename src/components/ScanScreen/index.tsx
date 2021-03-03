@@ -88,6 +88,7 @@ const ScanDevicesScreenContainer = ({ onDeviceConnected, onClose }) => {
         placeholderTextColor={"gray"}
       />
       <TouchableOpacity
+        testID={"StartScanButton"}
         style={{ backgroundColor: "green", width: "100%", height: 50, borderRadius: 10, justifyContent: "center", alignItems: "center" }}
         onPress={() => {
           scan();

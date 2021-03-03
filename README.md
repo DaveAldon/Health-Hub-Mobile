@@ -19,6 +19,12 @@ Note that you need to run on a physical device or else the bluetooth functionali
 - iOS `react-native run-ios --configuration=release`
 - Android `cd android && ./gradlew assembleRelease -x bundleReleaseJsAndAssets`
 
+### Detox Troubleshooting
+
+- ##### ChildProcessError: Command failed: applesimutils --list --byType "iPhone 12 Pro Max"
+  1. `brew tap wix/brew`
+  2. `brew install applesimutils`
+
 ### Build Troubleshooting
 
 - #### Android
@@ -94,6 +100,16 @@ Note that you need to run on a physical device or else the bluetooth functionali
   ```
 
 ## General Troubleshooting
+
+##### My builds are old versions, not the latest!
+
+- ##### Android
+  1. Delete files inside directory android/app/src/main/assets
+  2. `react-native bundle --platform android --dev false --entry-file index.tsx --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res`
+  3. `react-native run-android`
+- ##### iOS
+  1. `react-native bundle --entry-file index.tsx --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios/assets`
+  2. `react-native run-ios --device`
 
 #### Android
 
