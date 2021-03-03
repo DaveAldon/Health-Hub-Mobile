@@ -4,11 +4,11 @@
   "apps": {
     "ios": {
       "type": "ios.app",
-      "binaryPath": "SPECIFY_PATH_TO_YOUR_APP_BINARY"
+      "binaryPath": "ios/Build/Products/Release-iphonesimulator/firstapp.app"
     },
     "android": {
       "type": "android.apk",
-      "binaryPath": "SPECIFY_PATH_TO_YOUR_APP_BINARY"
+      "binaryPath": "android/app/build/outputs/apk/release/app-release.apk"
     }
   },
   "devices": {

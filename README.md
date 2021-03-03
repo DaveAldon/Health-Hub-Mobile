@@ -8,13 +8,25 @@
 
 ## Run
 
-- `npx react-native run-ios --simulator="iPhone 12 Pro Max`
+Note that you need to run on a physical device or else the bluetooth functionality won't work.
 
-## Build .app for Detox
+- iOS `react-native run-ios --device`
+- Android `react-native run-android`
+- Specific iOS simulator `npx react-native run-ios --simulator="iPhone 12 Pro Max"`
 
-- `react-native run-ios --configuration=release`
+### Build for Release or Detox
 
-##### Bluetooth plugin requires extra fiddling
+- iOS `react-native run-ios --configuration=release`
+- Android `cd android && ./gradlew assembleRelease -x bundleReleaseJsAndAssets`
+
+### Build Troubleshooting
+
+- #### Android
+  - ##### Execution failed for task ':app:bundleReleaseJsAndAssets'
+    Solution: `react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res`
+    Then build: `cd android && ./gradlew assembleRelease -x bundleReleaseJsAndAssets`
+
+### Library Setup (BLE requires extra fiddling)
 
 - ##### iOS
 
@@ -81,15 +93,7 @@
       ...
   ```
 
-## Run
-
-Note that you need to run on a physical device or else the bluetooth functionality won't work.
-
-- iOS `react-native run-ios --device`
-
-- Android `react-native run-android`
-
-## Troubleshooting
+## General Troubleshooting
 
 #### Android
 
