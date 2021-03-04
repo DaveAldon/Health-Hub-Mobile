@@ -58,6 +58,7 @@ export default function LineChartECG(props: IProp) {
     <View style={{ height: "100%", flexDirection: "column", paddingHorizontal: 10, backgroundColor: "white", borderRadius: 10 }}>
       {live && (
         <TouchableOpacity
+          testID="ResetIntervalButton"
           style={{ padding: 15, borderRadius: 10, backgroundColor: "#ebebeb", margin: 5 }}
           onPress={() => {
             setSeconds(0);

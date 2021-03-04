@@ -19,6 +19,7 @@ export function Header(props: IProp) {
   return (
     <View style={{ height: 50, backgroundColor: "white", justifyContent: "center", flexDirection: "row", alignItems: "center", paddingHorizontal: 5 }}>
       <TouchableOpacity
+        testID="NavHamburger"
         style={{ left: 0, position: "absolute" }}
         onPress={() => {
           props.navigation.openDrawer();
