@@ -113,6 +113,27 @@ Note that you need to run on a physical device or else the bluetooth functionali
 
 #### Android
 
+- ##### adb version mismatch
+
+  If you run an adb command, and it restarts and outputs a version mismatch like so:
+  `adb server version (32) doesn't match this client (41); killing...`
+  This is likely due to your environment variables not being setup correctly. Many solutions online point us to just stopping/starting adb server, but that may not suffice. If you're using a mac with zsh, run the following:
+  
+  `nano ~./zshrc`
+  
+  Add this to the file:
+  
+  ```
+  alias adb='/Users/USERNAME/Library/Android/sdk/platform-tools/adb'
+  export ANDROID_HOME=$HOME/Library/Android/sdk
+  export PATH=$PATH:$ANDROID_HOME/emulator
+  export PATH=$PATH:$ANDROID_HOME/tools
+  export PATH=$PATH:$ANDROID_HOME/tools/bin
+  export PATH=$PATH:$ANDROID_HOME/platform-tools
+  ```
+  
+  Save, and restart terminal instances, or use `source ~/.zshrc`
+
 - ##### Build error
 
   The error may look something like this, or a general failure to install because of "missing sdk" even though it's installed!
